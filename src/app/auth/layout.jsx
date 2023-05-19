@@ -1,0 +1,14 @@
+import "./auth.css";
+import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ["latin"] });
+export default function AuthLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <header></header>
+        {children}
+        <header></header>
+      </body>
+    </html>
+  );
+}
