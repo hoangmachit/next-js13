@@ -13,7 +13,8 @@ import AdminNavbar from "@/components/admin/AdminNavbar";
 import Script from "next/script";
 import { getUserLogin } from "@/lib/admin";
 export default async function AdminLayout({ children }) {
-  const { user, permissions } = await getUserLogin();
+  const data = await getUserLogin();
+  const { permissions, user } = data.result;
   return (
     <html lang="en">
       <head>

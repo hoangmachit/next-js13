@@ -8,7 +8,7 @@ export const metadata = {
 };
 export default async function AdminRolesDetail({ params }) {
   const { id } = params;
-  const { role, status, code } = await getRoleDetail(id);
+  const { success, result } = await getRoleDetail(id);
   return (
     <>
       <div className="container-xxl flex-grow-1 container-p-y">
@@ -17,10 +17,10 @@ export default async function AdminRolesDetail({ params }) {
         </h4>
         <div className="row">
           <div className="col-md-12">
-            {status && code === 403 ? (
+            {success && success === 403 ? (
               <Forbidden />
             ) : (
-              <RolesDetail role={role} />
+              <RolesDetail role={result} />
             )}
           </div>
         </div>

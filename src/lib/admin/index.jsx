@@ -1,6 +1,6 @@
-import { httpAuth } from "@/hook";
+import { fetchServer } from "@/hook/fetch/server";
 export const getUserLogin = async () => {
-  const response = await httpAuth(`/user`);
-  const result = await response.json();
-  return result;
+  const response = await fetchServer(`/user`, {}, false);
+  const data = await response.json();
+  return data;
 };

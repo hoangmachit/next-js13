@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\Admin\RoleController;
-use App\Http\Controllers\Api\Admin\UserController;
-use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Admin\RoleController;
+use App\Http\Controllers\Api\Admin\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,25 +18,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', [AuthController::class, 'login']);
+
+
+Route::post('login', [AuthController::class, 'login']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
-    Route::get('/cross', function (Request $request) {
-        return $request->user();
-    });
-    Route::prefix('admin')->group(function () {
-        Route::prefix('user')->group(function () {
-            Route::controller(UserController::class)->group(function () {
-                Route::get('list', 'list');
-                Route::get('{id}', 'detail')->where('id', '[0-9]+');
-            });
-        });
-        Route::prefix('roles')->group(function () {
-            Route::controller(RoleController::class)->group(function () {
-                Route::get('list', 'list');
-                Route::get('{id}', 'detail')->where('id', '[0-9]+');
-                Route::post('{id}', 'update')->where('id', '[0-9]+');
-            });
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('verify-token', [AuthController::class, 'verifyToken']);
+    Route::prefix('v1')->group(function () {
+        Route::prefix('admin')->group(function () {
+            Route::resource('user', UserController::class);
+            Route::resource('role', RoleController::class);
+            Route::resource('permission', PermissionController::class);
         });
     });
 });

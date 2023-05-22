@@ -1,7 +1,7 @@
-import { getDetail } from "@/lib/admin/users";
+import { getUserDetail } from "@/lib/admin/users";
 export default async function AdminUserDetail({ params }) {
   const { id } = params;
-  const user = await getDetail(id);
+  const user = await getUserDetail(id);
   return (
     <>
       <div className="container-xxl flex-grow-1 container-p-y">

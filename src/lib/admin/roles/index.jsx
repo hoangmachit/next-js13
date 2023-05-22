@@ -1,28 +1,38 @@
-import { httpAuth } from "@/hook";
+import { fetchServer } from "@/hook/fetch/server";
 export const getRoleList = async () => {
-  const response = await httpAuth("/admin/roles/list", {
+  const response = await fetchServer("/admin/role", {
     cache: "no-store",
   });
-  const result = await response.json();
-  return result;
+  const data = await response.json();
+  return data;
 };
 export const getRoleDetail = async (id) => {
   if (!id) return false;
-  const response = await httpAuth(`/admin/roles/${id}`, {
+  const response = await fetchServer(`/admin/role/${id}`, {
     cache: "no-store",
   });
-  const result = await response.json();
-  return result;
+  const data = await response.json();
+  return data;
 };
 
 export const updateRole = async (id, name) => {
   if (!id) return false;
   const formData = new FormData();
   formData.append("name", name);
-  const response = await httpAuth(`/admin/roles/${id}`, {
+  formData.append("_method", "PUT");
+  const response = await fetchServer(`/admin/role/${id}`, {
     method: "POST",
     body: formData,
   });
-  const result = await response.json();
-  return result;
+  const data = await response.json();
+  return data;
+};
+
+export const deleteRole = async (id) => {
+  if (!id) return false;
+  const response = await fetchServer(`/admin/role/${id}`, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  return data;
 };

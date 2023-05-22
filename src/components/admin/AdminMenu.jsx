@@ -1,30 +1,33 @@
+"use client";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 export default async function AdminMenu({ user, permissions }) {
+  const pathname = usePathname();
   return (
     <>
       <ul className="menu-inner py-1">
         <li className="menu-item active">
           <a href="" className="menu-link">
             <i className="menu-icon tf-icons bx bx-home-circle"></i>
-            <div data-i18n="Analytics">Dashboard</div>
+            <div data-i18n="Analytics">Dashboard {pathname}</div>
           </a>
         </li>
         <li className="menu-header small text-uppercase">
           <span className="menu-header-text">Account</span>
         </li>
-        <li className="menu-item">
+        <li className="menu-item open">
           <a href="" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top"></i>
             <div data-i18n="User">Users</div>
           </a>
           <ul className="menu-sub">
             <li className="menu-item">
-              <a href="/admin/users" className="menu-link">
+              <Link href={`/admin/users`} className="menu-link">
                 <div data-i18n="Account">List of User</div>
-              </a>
+              </Link>
             </li>
             <li className="menu-item">
-              <Link href="/admin/roles" className="menu-link">
+              <Link href={`/admin/roles`} className="menu-link">
                 <div data-i18n="Roles">Roles</div>
               </Link>
             </li>

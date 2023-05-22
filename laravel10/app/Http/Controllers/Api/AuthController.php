@@ -3,52 +3,57 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Validator;
+use Auth;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        try {
-            $credentials = $request->only(['user_name', 'password']);
-            $remember = $request->boolean('remember');
-            if (Auth::attempt($credentials, $remember)) {
-                $user = Auth::user();
-                $token = $user->createToken('api-token')->plainTextToken;
-                return response()->json([
-                    'status' => true,
-                    'token' => $token,
-                    'user' => $user,
-                ], 200);
-            }
-            return response()->json([
-                'status' => false,
-                'error' => 'Username or pasword valid',
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'error' => 'Login fail',
-            ], 200);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return sendError($validator->errors(), 400);
+        }
+
+        $credentials = $request->only('email', 'password');
+
+        if (!Auth::attempt($credentials)) {
+            return sendError('Login fail', 500);
+        }
+        if (Auth::attempt($validator->validated())) {
+            $user = Auth::user();
+            $token = $user->createToken('Bearer Token')->plainTextToken;
+            return sendResponse([
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ], "Login success !!!");
+        } else {
+            return sendError('Invalid credentials', 401);
         }
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return sendResponse('Logout successful', 200);
+    }
+
     public function user(Request $request)
     {
-        try {
-            $user = $request->user();
-            $permissions = $user->getAllPermissions();
-            return response()->json([
-                'status' => true,
-                'user' => $user,
-                'permissions' => $permissions,
-                'code' => 200
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'error' => 'Login not valid',
-            ], 200);
-        }
+        $user = $request->user();
+        return sendResponse([
+            'user' => $user,
+            'permissions' => $user->getAllPermissions()
+        ], 200);
+    }
+
+    public function verifyToken(Request $request)
+    {
+        return sendResponse('Token verification successful', 200);
     }
 }

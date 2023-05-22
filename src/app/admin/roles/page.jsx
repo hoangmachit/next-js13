@@ -5,7 +5,7 @@ export const metadata = {
 import { getRoleList } from "@/lib/admin/roles";
 import RolesIndex from "@/components/admin/Roles";
 export default async function AdminRoles() {
-  const roles = await getRoleList();
+  const data = await getRoleList();
   return (
     <>
       <div className="container-xxl flex-grow-1 container-p-y">
@@ -17,7 +17,7 @@ export default async function AdminRoles() {
             <div className="col-md-12">
               <div className="card">
                 <h5 className="card-header">List of Roles</h5>
-                <RolesIndex roles={roles} />
+                <RolesIndex roles={data.result} />
               </div>
             </div>
           </div>

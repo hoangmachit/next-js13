@@ -1,12 +1,12 @@
-import { httpAuth } from "@/hook";
-export const getListUser = async () => {
-  const response = await httpAuth("/admin/user/list");
+import { fetchServer } from "@/hook/fetch/server";
+export const getUserList = async () => {
+  const response = await fetchServer("/admin/user");
   const result = await response.json();
   return result;
 };
-export const getDetail = async (id) => {
+export const getUserDetail = async (id) => {
   if (!id) return false;
-  const response = await httpAuth(`/admin/user/${id}`);
+  const response = await fetchServer(`/admin/user/${id}`);
   const result = await response.json();
   return result;
 };

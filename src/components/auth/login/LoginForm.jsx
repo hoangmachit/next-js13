@@ -1,18 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { login } from "@/auth";
+import { login } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 export default function FormLogin() {
   const router = useRouter();
-  const [user_name, setUserName] = useState("supper");
-  const [password, setPassword] = useState("supper");
+  const [email, setEmail] = useState("user01@gmail.com");
+  const [password, setPassword] = useState("user01");
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const submitFormLogin = async (e) => {
     e.preventDefault();
-    await login(user_name, password, remember, setError, setLoading, router);
+    await login(email, password, remember, setError, setLoading, router);
   };
   return (
     <>
@@ -50,15 +50,15 @@ export default function FormLogin() {
                   </label>
                   <input
                     type="text"
-                    name="user_name"
-                    id="user_name"
+                    name="email"
+                    id="email"
                     className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
                       error ? "border-red-700" : ""
                     }`}
-                    placeholder="admin"
+                    placeholder="admin@gmail.com"
                     required=""
-                    defaultValue={user_name}
-                    onChange={(e) => setUserName(e.target.value)}
+                    defaultValue={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   {error && <small className="text-red-700">{error}</small>}
                 </div>

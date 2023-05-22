@@ -1,17 +1,23 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateRole } from "@/lib/admin/roles";
-import Alert from "@/components/Alert";
+import { updateRole, deleteRole } from "@/lib/admin/roles";
 export default function RolesDetail({ role }) {
   const router = useRouter();
-  const [status, setStatus] = useState({});
   const [name, setName] = useState(role.name);
   const submitFormUpdateRole = async (e) => {
     e.preventDefault();
-    const result = await updateRole(role.id, name);
-    router.refresh();
-    setStatus(result);
+    const { success } = await updateRole(role.id, name);
+    if (success) {
+      router.refresh();
+    }
+  };
+  const handleDeleteRole = async (e) => {
+    e.preventDefault();
+    const { success } = await deleteRole(role.id);
+    if (success) {
+      router.push("/admin/roles");
+    }
   };
   return (
     <div className="card mb-4">
@@ -19,7 +25,6 @@ export default function RolesDetail({ role }) {
         <h5 className="mb-0">Role infomations</h5>
       </div>
       <div className="card-body">
-        {status?.code && <Alert status={status} />}
         <form
           method="POST"
           role="form"
@@ -79,9 +84,18 @@ export default function RolesDetail({ role }) {
               />
             </div>
           </div>
-          <button type="submit" className="btn btn-primary">
-            Update
-          </button>
+          <div className="d-flex justify-content-between">
+            <button type="submit" className="btn btn-primary">
+              Update
+            </button>
+            <button
+              type="button"
+              onClick={(e) => handleDeleteRole(e)}
+              className="btn btn-danger"
+            >
+              Delete
+            </button>
+          </div>
         </form>
       </div>
     </div>
